@@ -1,3 +1,4 @@
+import PurchaseCard from "@/components/PurchaseCard";
 import Head from "next/head";
 import Router from "next/router";
 import Stripe from "stripe";
@@ -56,9 +57,8 @@ export default function Home({ prices }) {
       <Head></Head>
       {prices.map((price, index) => {
         return (
-          <div key={index} className="cursor-pointer" onClick={checkout}>
-            Buy {price.product.name}
-          </div>
+          // Renders an individual item
+          <PurchaseCard price={price} key={index} />
         );
       })}
     </div>
