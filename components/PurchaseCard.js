@@ -1,10 +1,15 @@
 import React from "react";
+import Router from "next/router";
 
 export default function PurchaseCard(props) {
   const { price } = props;
   console.log(price);
   return (
-    <div className="w-60 h-80 shadow-md border border-solid border-gray-100 cursor-pointer transition hover:opacity-60 bg-white">
+    <div
+      // Navigates to "/price.id" when clicked
+      onClick={() => Router.push(`${price.id}`)}
+      className="w-60 h-80 shadow-md border border-solid border-gray-100 cursor-pointer transition hover:opacity-60 bg-white"
+    >
       {price.product.images && (
         <div className="h-60 object-contain">
           <img src={price.product.images[0]} alt={price.product.name} />

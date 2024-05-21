@@ -1,9 +1,13 @@
 import React from "react";
+import Router from "next/router";
 
 export default function Header() {
   return (
     <div className="shadow-lg py-8 sticky top-0 flex justify-center items-center bg-white">
-      <h1 className="flex-1 text-center cursor-pointer select-none transition hover:opacity-50 duration-300">
+      <h1
+        onClick={() => Router.push("/")}
+        className="flex-1 text-center cursor-pointer select-none transition hover:opacity-50 duration-300"
+      >
         MYSTERY THEORY STORE
       </h1>
       <div>
