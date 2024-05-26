@@ -30,7 +30,7 @@ export const AppReducer = (state = initialState, action) => {
           if (curr !== action.value) {
             return { ...acc, [curr]: state.products[curr] };
           }
-          return { acc };
+          return acc;
         }, {}),
       };
     }
