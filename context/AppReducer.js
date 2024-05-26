@@ -1,10 +1,18 @@
+/**
+ * Defines the initial state and reducer a function for managing the state.
+ */
+
+// This object defined the initial state of the app.
 export const initialState = {
   prices: [],
   products: {}, // {[id], quantity}
 };
 
+// This function handles different actions to update the state.
+// Takes the current state and an action, and returns a new state based on the action type.
 export const AppReducer = (state = initialState, action) => {
   switch (action.type) {
+    //
     case "add_product": {
       //id
       return {

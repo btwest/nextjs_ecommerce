@@ -2,6 +2,8 @@ import PurchaseCard from "@/components/PurchaseCard";
 import Head from "next/head";
 import Router from "next/router";
 import Stripe from "stripe";
+import { useEffect } from "react";
+import { useAppContext } from "@/context/CartContext";
 
 //runs on server side before the page is rendered
 export async function getServerSideProps(context) {
@@ -27,6 +29,7 @@ export async function getServerSideProps(context) {
 
 //Default export function representing the home page component
 export default function Home({ prices }) {
+  const { state, dispatch } = useAppContext();
   //Handles checkout process
   async function checkout() {
     const lineItems = [
@@ -49,6 +52,13 @@ export default function Home({ prices }) {
     //Redirect the user to the Stripe checkout page (or cancel)
     Router.push(data.session.url);
   }
+
+  useEffect(() => {
+    dispatch({
+      type: "set_prices",
+      value: prices,
+    });
+  }, [prices]);
   console.log(prices);
 
   // Render the component
