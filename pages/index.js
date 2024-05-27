@@ -23,35 +23,13 @@ export async function getServerSideProps(context) {
 
   //Return the prices as props to be used in the page component
   return {
-    props: { prices },
+    props: { prices }, // will be passed to the page component as props
   };
 }
 
 //Default export function representing the home page component
 export default function Home({ prices }) {
   const { state, dispatch } = useAppContext();
-  //Handles checkout process
-  async function checkout() {
-    const lineItems = [
-      {
-        price: prices[0].id, //Use the first price ID from the list
-        quantity: 1, //Set the quantity to 1
-      },
-    ];
-
-    //Make a POST request to the API endpoint for creating a checkout session
-    const res = await fetch("api/checkout", {
-      method: "POST",
-      body: JSON.stringify({ lineItems }), //Send the line items in the request body
-    });
-
-    //Parse the JSON response from the server
-    const data = await res.json();
-    console.log(data);
-
-    //Redirect the user to the Stripe checkout page (or cancel)
-    Router.push(data.session.url);
-  }
 
   useEffect(() => {
     dispatch({
