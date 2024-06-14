@@ -27,7 +27,15 @@ export default function Description(props) {
 
   // Array created by extracting the keys from the metadata object of the product
   const tempSizes = Object.keys(product.product.metadata);
+
+  // Define the desired order of the sizes
+  const sizeOrder = ["XS", "S", "M", "L", "XL", "2XL"];
   // A function that returns a function to set the selected size
+
+  // Sort the sizes based on the predefined order
+  const sortedSizes = tempSizes.sort(
+    (a, b) => sizeOrder.indexOf(a) - sizeOrder.indexOf(b)
+  );
   function setSz(size) {
     return () => setSize(size);
   }
@@ -44,24 +52,24 @@ export default function Description(props) {
   }
 
   return (
-    <div className="mx-auto w-fit flex flex-wrap justify-center md:gap-6">
+    <div className="flex flex-wrap md:flex-nowrap justify-center mx-auto max-w-screen-lg p-4">
       <img
         src={product.product.images[0]}
         alt={product.product.id}
         style={{ maxHeight: "600px" }}
       />
-      <div className="">
+      <div className="w-full md:w-1/2 md:pl-6">
         <div className="flex justify-between items-center">
-          <h1 className="text-sm py-3 font-light tracking-wide capitalize text-2xl lg:text-3xl ">
+          <h1 className="text-2xl lg:text-3xl font-light tracking-wide capitalize py-3">
             {product.product.name}
           </h1>
-          <p>${product.unit_amount / 100}</p>
         </div>
-        <div className="max-w-full whitespace-normal text-justify pb-4 font-light">
+        <p className="text-xl lg:text-2xl pb-4">${product.unit_amount / 100}</p>
+        <div className="text-justify pb-4 font-light">
           <p>{product.product.description}</p>
           <p className="text-sm pt-4 pb-2">SIZE</p>
           <div className="flex text-sm items-center font-light pb-4 flex-wrap gap-2">
-            {tempSizes.map((sz, index) => {
+            {sortedSizes.map((sz, index) => {
               return (
                 <div
                   onClick={setSz(sz)}

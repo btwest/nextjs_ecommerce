@@ -13,6 +13,7 @@ export default function Header() {
       Object.keys(state.products[id]).map((size) => ({
         price: id,
         quantity: state.products[id][size],
+        description: size, // Include size in the description or as metadata TEST
       }))
     );
 

@@ -30,6 +30,15 @@ export default async function handler(req, res) {
       cancel_url: "http://localhost:3000/cancel",
       line_items: body.lineItems,
       mode: "payment",
+      billing_address_collection: "auto",
+      shipping_address_collection: {
+        allowed_countries: ["US", "CA"],
+      },
+      shipping_options: [
+        {
+          shipping_rate: "shr_1PRdWnKZbbKpGp3j8xovi0jG",
+        },
+      ],
     });
 
     // Send the session object as the response with a 201 status code
