@@ -8,18 +8,22 @@ export default function PurchaseCard(props) {
     <div
       // Navigates to "/price.id" when clicked
       onClick={() => Router.push(`${price.id}`)}
-      className="w-60 h-80 shadow-md border border-solid border-gray-100 cursor-pointer transition hover:opacity-60 bg-white"
+      className="w-60 h-80 cursor-pointer transition-all duration-300 hover:overflow-hidden group"
     >
       {price.product.images && (
-        <div className="h-60 object-contain">
-          <img src={price.product.images[0]} alt={price.product.name} />
+        <div className="h-60 overflow-hidden">
+          <img
+            src={price.product.images[0]}
+            alt={price.product.name}
+            className="object-contain transform transition-transform duration-300 group-hover:scale-110"
+          />
         </div>
       )}
 
-      <h1 className="text-sm text-center py-2 font-light tracking-wide uppercase">
+      <h1 className="text-sm text-left py-2 font-light tracking-wide uppercase">
         {price.product.name}
       </h1>
-      <p className=" text-center text-sm font-extralight">
+      <p className="text-left text-sm font-extralight">
         ${price.unit_amount / 100}
       </p>
     </div>

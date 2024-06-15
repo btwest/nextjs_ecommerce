@@ -29,7 +29,7 @@ export default function Description(props) {
   const tempSizes = Object.keys(product.product.metadata);
 
   // Define the desired order of the sizes
-  const sizeOrder = ["XS", "S", "M", "L", "XL", "2XL"];
+  const sizeOrder = ["XS", "S", "M", "L", "XL", "2XL", "3XL"];
   // A function that returns a function to set the selected size
 
   // Sort the sizes based on the predefined order
@@ -74,8 +74,10 @@ export default function Description(props) {
                 <div
                   onClick={setSz(sz)}
                   className={
-                    " uppercase border border-solid border-gray-200 w-10 select-none cursor-pointer transition duration-300 hover:bg-slate-100 py-1 grid place-items-center " +
-                    (sz === size ? "border-black border-2" : "")
+                    " uppercase border border-solid border-gray-200 w-10 select-none cursor-pointer transition duration-300 hover:opacity-50 py-1 grid place-items-center " +
+                    (sz === size
+                      ? "border-green-400 text-green-400 border-2"
+                      : "")
                   }
                   key={index}
                 >
