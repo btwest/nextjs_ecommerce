@@ -63,7 +63,7 @@ export const AppReducer = (state = initialState, action) => {
         products: Object.keys(state.products).reduce((acc, curr) => {
           const prod = state.products[curr];
           const sizes = Object.keys(prod);
-          console.log(sizes.length - 1);
+
           if (curr !== action.value[0]) {
             return { ...acc, [curr]: prod };
           }

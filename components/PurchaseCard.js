@@ -3,7 +3,7 @@ import Router from "next/router";
 
 export default function PurchaseCard(props) {
   const { price } = props;
-  console.log(price);
+
   return (
     <div
       // Navigates to "/price.id" when clicked

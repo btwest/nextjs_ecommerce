@@ -16,27 +16,40 @@ export default function Header() {
         description: size, // Include size in the description or as metadata TEST
       }))
     );
+    try {
+      // Make a POST request to the API endpoint for creating a checkout session
+      const res = await fetch("api/checkout", {
+        method: "POST",
+        body: JSON.stringify({ lineItems }), // Send the line items in the request body
+      });
 
-    // Make a POST request to the API endpoint for creating a checkout session
-    const res = await fetch("api/checkout", {
-      method: "POST",
-      body: JSON.stringify({ lineItems }), // Send the line items in the request body
-    });
+      // Parse the JSON response from the server
+      const data = await res.json();
+      //console.log("Checkout session data:", data);
 
-    // Parse the JSON response from the server
-    const data = await res.json();
-    console.log(data);
-
-    // Redirect the user to the Stripe checkout page (or cancel)
-    Router.push(data.session.url);
+      if (data.session && data.session.url) {
+        Router.push(data.session.url);
+      } else {
+        console.error("Failed to create checkout session:", data.message);
+        alert(`Failed to create checkout session: ${data.message}`);
+      }
+    } catch (err) {
+      console.error("Checkout error:", err.message);
+      alert(`An error occurred during checkout: ${err.message}`);
+    }
   }
 
   function increment(id, size, count) {
-    return () =>
-      dispatch({
-        type: "vary_count",
-        value: [id, size, count + 1],
-      });
+    const product = state.prices.find((val) => val.id === id);
+    const availableQuantity = parseInt(product.product.metadata[size], 10);
+    if (count < availableQuantity) {
+      return () =>
+        dispatch({
+          type: "vary_count",
+          value: [id, size, count + 1],
+        });
+    }
+    return () => {}; // No-op if quantity exceeds available quantity
   }
 
   function decrement(id, size, count) {
@@ -78,7 +91,7 @@ export default function Header() {
               </div>
               {Object.keys(state.products).map((productId, index) => {
                 const prod = state.products[productId];
-                console.log(prod);
+
                 const product = state.prices.find(
                   (val) => val.id === productId
                 );
@@ -150,8 +163,14 @@ export default function Header() {
       >
         MYSTERY THEORIES STORE
       </h1>
-      <div onClick={() => setDisplayCheckout(!displayCheckout)}>
-        <i className="fa-solid fa-bag-shopping px-2 py-2 text-xl sm:text-3xl mr-4 transition hover:opacity-60 duration-300 cursor-pointer"></i>
+      <div
+        className="relative cursor-pointer grid place-items-center"
+        onClick={() => setDisplayCheckout(!displayCheckout)}
+      >
+        <i className="fa-solid fa-bag-shopping px-2 py-2 text-xl sm:text-3xl mr-4 transition hover:opacity-60 duration-300"></i>
+        {Object.keys(state.products).length > 0 && (
+          <div className="absolute inset-0 mx-auto top-1.5 h-2 w-2 rounded-full bg-green-400 z-20" />
+        )}
       </div>
     </div>
   );

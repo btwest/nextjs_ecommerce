@@ -14,7 +14,7 @@ export async function getServerSideProps(context) {
 export default function Description(props) {
   const [size, setSize] = React.useState(null);
   const { id: path } = props;
-  const { state: { prices } = [], dispatch } = useAppContext();
+  const { state: { prices, products } = [], dispatch } = useAppContext();
   const product = prices.filter((val) => val.id === path.replace("/", ""))[0];
 
   if (product === undefined) {
@@ -39,16 +39,23 @@ export default function Description(props) {
   function setSz(size) {
     return () => setSize(size);
   }
-  console.log(size);
 
   function addToBasket(prod) {
     if (!size) {
       return;
     }
-    return () => {
-      setSize(null);
+
+    const currentCount = products[prod.id]?.[size] || 0;
+    const availableQuantity = parseInt(prod.product.metadata[size], 10);
+
+    if (currentCount < availableQuantity) {
       dispatch({ type: "add_product", value: [prod.id, size] });
-    };
+      setSize(null);
+    } else {
+      alert(
+        `Cannot add more ${size} size items to the cart. Maximum quantity reached.`
+      );
+    }
   }
 
   return (
@@ -70,27 +77,32 @@ export default function Description(props) {
           <p className="text-sm pt-4 pb-2">SIZE</p>
           <div className="flex text-sm items-center font-light pb-4 flex-wrap gap-2">
             {sortedSizes.map((sz, index) => {
-              return (
-                <div
-                  onClick={setSz(sz)}
-                  className={
-                    " uppercase border border-solid border-gray-200 w-10 select-none cursor-pointer transition duration-300 hover:opacity-50 py-1 grid place-items-center " +
-                    (sz === size
-                      ? "border-green-400 text-green-400 border-2"
-                      : "")
-                  }
-                  key={index}
-                >
-                  {sz}
-                </div>
-              );
+              if (product.product.metadata[sz] === "0") {
+                return <div key={index}></div>;
+              } else {
+                return (
+                  <div
+                    onClick={setSz(sz)}
+                    className={
+                      " uppercase border border-solid border-gray-200 w-10 select-none cursor-pointer transition duration-300 hover:opacity-50 py-1 grid place-items-center " +
+                      (sz === size
+                        ? "border-green-400 text-green-400 border-2"
+                        : "")
+                    }
+                    key={index}
+                  >
+                    {sz}
+                  </div>
+                );
+              }
             })}
           </div>
         </div>
         <hr />
         <button
-          onClick={addToBasket(product)}
+          onClick={() => addToBasket(product)}
           className="w-full my-4 p-4 border border-solid border-gray-100 shadow bg-slate-100 text-slate-700 font-light transition duration-300 hover:opacity-50"
+          disabled={!size || parseInt(product.product.metadata[size], 10) === 0}
         >
           Add To Basket
         </button>

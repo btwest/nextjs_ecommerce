@@ -37,7 +37,6 @@ export default function Home({ prices }) {
       value: prices,
     });
   }, [prices]);
-  console.log(prices);
 
   // Render the component
   return (

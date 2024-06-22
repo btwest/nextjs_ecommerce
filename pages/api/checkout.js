@@ -1,6 +1,16 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import Stripe from "stripe";
 
+const successUrl =
+  process.env.NODE_ENV === "production"
+    ? `${process.env.NEXT_PUBLIC_URL}/success`
+    : "http://localhost:3000/success";
+
+const cancelUrl =
+  process.env.NODE_ENV === "production"
+    ? `${process.env.NEXT_PUBLIC_URL}/cancel`
+    : "http://localhost:3000/cancel";
+
 //Default export function that handles API requests
 export default async function handler(req, res) {
   //Check if the request method is POST
@@ -26,8 +36,8 @@ export default async function handler(req, res) {
 
     //Create a checkout session with the provided line items
     const session = await stripe.checkout.sessions.create({
-      success_url: "http://localhost:3000/success",
-      cancel_url: "http://localhost:3000/cancel",
+      success_url: successUrl,
+      cancel_url: cancelUrl,
       line_items: body.lineItems,
       mode: "payment",
       billing_address_collection: "auto",
@@ -36,15 +46,17 @@ export default async function handler(req, res) {
       },
       shipping_options: [
         {
-          shipping_rate: "shr_1PRdWnKZbbKpGp3j8xovi0jG",
+          shipping_rate: "shr_1PUUe3KZbbKpGp3jbGQMrW1U",
         },
       ],
     });
+    //console.log("Stripe session created:", session);
 
     // Send the session object as the response with a 201 status code
     res.status(201).json({ session });
   } catch (err) {
     // Handle any errors by sending a 500 status code and the error message
+    console.error("Error creating Stripe session:", err);
     res.status(500).send({ message: err.message });
   }
 }
